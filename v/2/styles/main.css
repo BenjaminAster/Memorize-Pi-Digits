@@ -1,0 +1,71 @@
+* {
+  color: white;
+  background-color: #202124;
+  padding: 0px;
+  margin: 0px;
+  border: none;
+  overflow: hidden;
+}
+
+html,
+body {
+  margin: 0px;
+  padding: 0px;
+  border: none;
+}
+
+canvas#canvas {
+  border: none;
+}
+
+#c0 {
+  background-color: #df0000;
+  background-color: #f00;
+}
+
+#c1 {
+  background-color: #00e61f;
+  background-color: #0f4;
+}
+
+#c2 {
+  background-color: #00d1e0;
+  background-color: #0ff;
+}
+
+#c3 {
+  background-color: #ff00f2;
+  background-color: #f09;
+}
+
+#c4 {
+  background-color: #fbff00;
+  background-color: #ef0;
+}
+
+#c5 {
+  background-color: #0e3aff;
+  background-color: #46f;
+}
+
+#c6 {
+  background-color: #ff8800;
+  background-color: #fa4;
+}
+
+#c7 {
+  background-color: #70269b;
+  background-color: #90f;
+}
+
+#c8 {
+  background-color: #3d8d0f;
+  background-color: #6b0;
+}
+
+#c9 {
+  background-color: #926b00;
+  background-color: #b80;
+}
+
+/*# sourceMappingURL=main.css.map */
