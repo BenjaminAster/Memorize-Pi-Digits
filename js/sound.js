@@ -1,42 +1,13 @@
-"use strict";
 class Sound {
+    frequency;
+    // private amplitude: number;
+    audioCtx;
+    oscillator;
+    gain;
+    num;
+    maxAmplitude;
+    prevMillis = performance.now();
     constructor(num) {
-        this.prevMillis = performance.now();
-        this.start = () => {
-            // this.gain.gain.value = .01;
-            this.oscillator.start();
-            this.prevMillis = performance.now();
-            window.setTimeout(this.louder);
-            // console.log(this.num, this.gain.gain.value, "STARTING...");
-            // console.log(this.num, {
-            // 	frequency: this.frequency,
-            // 	amplitude: this.amplitude,
-            // });
-        };
-        this.louder = () => {
-            this.gain.gain.value +=
-                (performance.now() - this.prevMillis) * this.maxAmplitude / 50;
-            this.prevMillis = performance.now();
-            // console.log(this.num, this.gain.gain.value);
-            window.setTimeout((this.gain.gain.value >= this.maxAmplitude) ? this.quieter : this.louder);
-        };
-        this.quieter = () => {
-            this.gain.gain.value -=
-                (performance.now() - this.prevMillis) * this.maxAmplitude / 300;
-            this.prevMillis = performance.now();
-            // console.log(this.num, this.gain.gain.value);
-            if (this.gain.gain.value <= 0) {
-                this.stop();
-            }
-            else {
-                window.setTimeout(this.quieter);
-            }
-        };
-        this.stop = () => {
-            // console.log(this.num, this.gain.gain.value, "STOPPING...");
-            this.oscillator.stop();
-            //  this;
-        };
         this.num = num;
         this.maxAmplitude = .03;
         // var attack = 0.002;
@@ -74,5 +45,40 @@ class Sound {
         this.gain = gain;
         window.setTimeout(this.start);
     }
+    start = () => {
+        // this.gain.gain.value = .01;
+        this.oscillator.start();
+        this.prevMillis = performance.now();
+        window.setTimeout(this.louder);
+        // console.log(this.num, this.gain.gain.value, "STARTING...");
+        // console.log(this.num, {
+        // 	frequency: this.frequency,
+        // 	amplitude: this.amplitude,
+        // });
+    };
+    louder = () => {
+        this.gain.gain.value +=
+            (performance.now() - this.prevMillis) * this.maxAmplitude / 50;
+        this.prevMillis = performance.now();
+        // console.log(this.num, this.gain.gain.value);
+        window.setTimeout((this.gain.gain.value >= this.maxAmplitude) ? this.quieter : this.louder);
+    };
+    quieter = () => {
+        this.gain.gain.value -=
+            (performance.now() - this.prevMillis) * this.maxAmplitude / 300;
+        this.prevMillis = performance.now();
+        // console.log(this.num, this.gain.gain.value);
+        if (this.gain.gain.value <= 0) {
+            this.stop();
+        }
+        else {
+            window.setTimeout(this.quieter);
+        }
+    };
+    stop = () => {
+        // console.log(this.num, this.gain.gain.value, "STOPPING...");
+        this.oscillator.stop();
+        //  this;
+    };
 }
 //# sourceMappingURL=sound.js.map

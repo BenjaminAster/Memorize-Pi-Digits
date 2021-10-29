@@ -1,4 +1,3 @@
-"use strict";
 // import {Manager} from "./manager";
 let manager;
 window.onload = () => {

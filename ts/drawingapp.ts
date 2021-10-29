@@ -20,7 +20,8 @@ class DrawingApp {
 	// private tileSize: number = 0;
 
 	constructor() {
-		let canvas = $<HTMLCanvasElement>("canvas#canvas")[0];
+		// let canvas = $<HTMLCanvasElement>("canvas#canvas")[0];
+		let canvas: HTMLCanvasElement = document.querySelector<HTMLCanvasElement>("canvas#canvas");
 		let ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 
 		ctx.lineCap = "round";

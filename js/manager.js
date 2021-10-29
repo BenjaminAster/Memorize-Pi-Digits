@@ -1,4 +1,3 @@
-"use strict";
 // import {DrawingApp} from "./drawingapp";
 var MemorizationState;
 (function (MemorizationState) {
@@ -8,61 +7,26 @@ var MemorizationState;
     MemorizationState[MemorizationState["gameOver"] = 3] = "gameOver";
 })(MemorizationState || (MemorizationState = {}));
 class Manager {
+    drawingApp;
+    gridWidth = 3;
+    gridHeight = 4;
+    piDigits = "";
+    crrStartDigit = 0;
+    crrEndDigit;
+    crrDigit = this.crrStartDigit;
+    sounds = new Array();
+    memorizationState = MemorizationState.start;
     constructor() {
-        this.gridWidth = 3;
-        this.gridHeight = 4;
-        this.piDigits = "";
-        this.crrStartDigit = 0;
-        this.crrDigit = this.crrStartDigit;
-        this.sounds = new Array();
-        this.memorizationState = MemorizationState.start;
-        this.startMemorization = () => {
-            this.memorizationState = MemorizationState.memorization;
-            this.crrDigit = this.crrStartDigit;
-            setTimeout(this.nextShape, 1000);
-        };
-        this.nextShape = () => {
-            this.drawingApp.animateShape(parseInt(this.piDigits[this.crrDigit]));
-            // this.sounds[parseInt(this.piDigits[this.crrDigit])]?.start();
-            this.sounds.push(new Sound(window.parseInt(this.piDigits[this.crrDigit])));
-            window.setTimeout(() => this.sounds.shift(), 2000);
-            this.crrDigit++;
-            if (this.crrDigit >= this.crrEndDigit) {
-                setTimeout(this.startMemorizationInput, 1000);
-            }
-            else {
-                setTimeout(this.nextShape, 600);
-            }
-        };
-        this.startMemorizationInput = () => {
-            this.memorizationState = MemorizationState.memorizationInput;
-            this.crrDigit = this.crrStartDigit;
-        };
-        this.handleMemorizationInput = (key) => {
-            this.drawingApp.animateShape(key);
-            this.sounds.push(new Sound(key));
-            window.setTimeout(() => this.sounds.shift(), 2000);
-            if (key === parseInt(this.piDigits[this.crrDigit])) {
-                this.crrDigit++;
-                if (this.crrDigit >= this.crrEndDigit) {
-                    this.crrEndDigit++;
-                    window.localStorage.setItem("crrEndDigit", this.crrEndDigit.toString());
-                    setTimeout(this.startMemorization, 1000);
-                }
-            }
-            else {
-                this.memorizationState = MemorizationState.gameOver;
-                // window.alert("Game Over. Restarting...");
-                console.log("%cGame Over! Restarting...", "font-size: 2em; background: black; color: white;");
-                window.setTimeout(() => console.clear(), 1000);
-                window.setTimeout(this.startMemorization, 1000);
-            }
-        };
         this.drawingApp = new DrawingApp();
-        $.get("pi-digits.txt", (data) => {
+        // $.get("pi-digits.txt", (data: string): void => {
+        // 	this.piDigits = data.replaceAll(/\s/g, "");
+        // 	this.startMemorization();
+        // });
+        (async () => {
+            const data = await (await window.fetch("./pi-digits.txt")).text();
             this.piDigits = data.replaceAll(/\s/g, "");
             this.startMemorization();
-        });
+        })();
         document.addEventListener("keydown", (e) => {
             let key = parseInt(e.key);
             if (!isNaN(key) &&
@@ -78,5 +42,47 @@ class Manager {
         // 	this.sounds.push(new Sound(i));
         // }
     }
+    startMemorization = () => {
+        this.memorizationState = MemorizationState.memorization;
+        this.crrDigit = this.crrStartDigit;
+        setTimeout(this.nextShape, 1000);
+    };
+    nextShape = () => {
+        this.drawingApp.animateShape(parseInt(this.piDigits[this.crrDigit]));
+        // this.sounds[parseInt(this.piDigits[this.crrDigit])]?.start();
+        this.sounds.push(new Sound(window.parseInt(this.piDigits[this.crrDigit])));
+        window.setTimeout(() => this.sounds.shift(), 2000);
+        this.crrDigit++;
+        if (this.crrDigit >= this.crrEndDigit) {
+            setTimeout(this.startMemorizationInput, 1000);
+        }
+        else {
+            setTimeout(this.nextShape, 600);
+        }
+    };
+    startMemorizationInput = () => {
+        this.memorizationState = MemorizationState.memorizationInput;
+        this.crrDigit = this.crrStartDigit;
+    };
+    handleMemorizationInput = (key) => {
+        this.drawingApp.animateShape(key);
+        this.sounds.push(new Sound(key));
+        window.setTimeout(() => this.sounds.shift(), 2000);
+        if (key === parseInt(this.piDigits[this.crrDigit])) {
+            this.crrDigit++;
+            if (this.crrDigit >= this.crrEndDigit) {
+                this.crrEndDigit++;
+                window.localStorage.setItem("crrEndDigit", this.crrEndDigit.toString());
+                setTimeout(this.startMemorization, 1000);
+            }
+        }
+        else {
+            this.memorizationState = MemorizationState.gameOver;
+            // window.alert("Game Over. Restarting...");
+            console.log("%cGame Over! Restarting...", "font-size: 2em; background: black; color: white;");
+            window.setTimeout(() => console.clear(), 1000);
+            window.setTimeout(this.startMemorization, 1000);
+        }
+    };
 }
 //# sourceMappingURL=manager.js.map

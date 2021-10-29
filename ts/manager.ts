@@ -27,11 +27,19 @@ class Manager {
 	constructor() {
 		this.drawingApp = new DrawingApp();
 
-		$.get("pi-digits.txt", (data: string): void => {
+		// $.get("pi-digits.txt", (data: string): void => {
+		// 	this.piDigits = data.replaceAll(/\s/g, "");
+
+		// 	this.startMemorization();
+		// });
+
+		(async () => {
+			const data = await (await window.fetch("./pi-digits.txt")).text()
 			this.piDigits = data.replaceAll(/\s/g, "");
 
 			this.startMemorization();
-		});
+		})();
+
 
 		document.addEventListener("keydown", (e): void => {
 			let key: number = parseInt(e.key);
